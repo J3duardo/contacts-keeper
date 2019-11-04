@@ -60,7 +60,7 @@ router.post("/", [
 
   } catch (error) {
     console.log(error.message);
-    res.status(400).send("Error interno del servidor")
+    res.status(500).send("Error interno del servidor")
   }
 });
 
