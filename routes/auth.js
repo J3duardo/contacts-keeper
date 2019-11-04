@@ -4,6 +4,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const {check, validationResult} = require("express-validator");
 const User = require("../models/User");
+const auth = require("../middleware/authMiddleware");
+
+//Tomar data del usuario logueado
+router.get("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json({user});
+  }
+  catch (error) {
+    console.log(error.message)
+    res.status(500).json({msg: "Error interno del servidor"})
+  }
+});
 
 //Iniciar sesión de usuarios
 router.post("/", [
@@ -45,16 +58,12 @@ router.post("/", [
       res.json({token})
     });
 
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error.message);
     res.status(500).send("Error interno del servidor")
   }
 
 });
-
-// //Inicio de sesión de usuarios
-// router.post("/", (req, res) => {
-//   res.send("Inicio de sesión de usuarios")
-// });
 
 module.exports = router;
