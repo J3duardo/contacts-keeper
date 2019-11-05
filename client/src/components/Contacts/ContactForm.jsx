@@ -1,8 +1,8 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import ContactContext from "../../context/contact/contactContext";
 
 const ContactForm = () => {
-  const contactContext = useContext(ContactContext)
+  const contactContext = useContext(ContactContext);
 
   const [contact, setContact] = useState({
     name: "",
@@ -11,6 +11,19 @@ const ContactForm = () => {
     type: "personal"
   });
 
+  useEffect(() => {
+    if(contactContext.current) {
+      setContact(contactContext.current)
+    } else {
+      setContact({
+        name: "",
+        email: "", 
+        phone: "",
+        type: "personal"
+      })
+    }
+  }, [contactContext.current]);
+
   const onChangeHandler = (e) => {
     setContact({
       ...contact,
@@ -18,9 +31,18 @@ const ContactForm = () => {
     })
   }
 
+  const clearAll = () => {
+    contactContext.clearCurrentContact();
+  }
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    contactContext.addContact(contact);
+    if (!contactContext.current) {
+      contactContext.addContact(contact);
+    } else {
+      contactContext.updateContact(contact)
+    }
+    clearAll();
     setContact({
       name: "",
       email: "", 
@@ -33,7 +55,7 @@ const ContactForm = () => {
 
   return (
     <form onSubmit={onSubmitHandler}>
-      <h2 className="text-primary">Add Contact</h2>
+      <h2 className="text-primary">{`${!contactContext.current ? "Add" : "Edit"} Contact`}</h2>
       <input 
         type="text"
         placeholder="Name"
@@ -76,8 +98,15 @@ const ContactForm = () => {
         checked={type === "professional"}
       />
       <div>
-        <input type="submit" value="Add contact" className="btn btn-primary btn-block" />
+        <input type="submit" value={`${!contactContext.current ? "Add" : "Edit"} Contact`} className="btn btn-primary btn-block" />
       </div>
+      {contactContext.current && (
+        <div>
+          <button className="btn btn-light btn-block" onClick={clearAll}>
+            Cancel
+          </button>
+        </div>
+      )}
     </form>
   );
 }

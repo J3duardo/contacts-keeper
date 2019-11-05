@@ -15,6 +15,14 @@ export default (state, action) => {
         ...state,
         contacts: filteredContacts
       }
+    case UPDATE_CONTACT:
+      const contactIndex = state.contacts.findIndex(contact => contact.id === action.payload.id);
+      const updatedContacts = [...state.contacts];
+      updatedContacts.splice(contactIndex, 1, action.payload);
+      return {
+        ...state,
+        contacts: updatedContacts
+      }
     case SET_CURRENT:
       return {
         ...state,
