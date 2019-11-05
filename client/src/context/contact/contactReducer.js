@@ -8,12 +8,12 @@ export default (state, action) => {
         contacts: [...state.contacts, action.payload]
       }
     case DELETE_CONTACT:
-      const filteredContacts = state.contacts.filter(contact => {
+      const nonDeletedContacts = state.contacts.filter(contact => {
         return contact.id !== action.payload
       });
       return {
         ...state,
-        contacts: filteredContacts
+        contacts: nonDeletedContacts
       }
     case UPDATE_CONTACT:
       const contactIndex = state.contacts.findIndex(contact => contact.id === action.payload.id);
@@ -23,6 +23,21 @@ export default (state, action) => {
         ...state,
         contacts: updatedContacts
       }
+    case FILTER_CONTACTS:
+      const filteredContacts = state.contacts.filter(contact => {
+        return contact.name.toLowerCase().includes(action.payload.toLowerCase())
+      })
+      return {
+        ...state,
+        filter: action.payload,
+        filteredContacts: filteredContacts
+      }
+    case CLEAR_FILTER:
+        return {
+          ...state,
+          filter: null,
+          filteredContacts: []
+        }
     case SET_CURRENT:
       return {
         ...state,

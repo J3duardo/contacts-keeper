@@ -29,7 +29,9 @@ const ContactState = (props) => {
         type: "personal"
       }
     ],
-    current: null
+    current: null,
+    filter: null,
+    filteredContacts: []
   }
 
   const [state, dispatch] = useReducer(contactReducer, initialState);
@@ -62,7 +64,7 @@ const ContactState = (props) => {
   //Limpiar contacto actual
   const clearCurrentContact = () => {
     dispatch({
-      type: SET_CURRENT
+      type: CLEAR_CURRENT
     })
   }
 
@@ -75,8 +77,19 @@ const ContactState = (props) => {
   }
 
   //Filtrar contactos
+  const filterContacts = (filter) => {
+    dispatch({
+      type: FILTER_CONTACTS,
+      payload: filter
+    })
+  }
 
   //Borrar filtro
+  const clearFilter = () => {
+    dispatch({
+      type: CLEAR_FILTER
+    })
+  }
 
 
   return (
@@ -84,11 +97,15 @@ const ContactState = (props) => {
       value={{
         contacts: state.contacts,
         current: state.current,
+        filter: state.filter,
+        filteredContacts: state.filteredContacts,
         addContact: addContact,
         deleteContact: deleteContact,
         setCurrentContact: setCurrentContact,
         clearCurrentContact: clearCurrentContact,
-        updateContact: updateContact
+        updateContact: updateContact,
+        filterContacts: filterContacts,
+        clearFilter:clearFilter
       }}
     >
       {props.children}
