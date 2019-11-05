@@ -7,6 +7,14 @@ export default (state, action) => {
         ...state,
         contacts: [...state.contacts, action.payload]
       }
+    case DELETE_CONTACT:
+      const filteredContacts = state.contacts.filter(contact => {
+        return contact.id !== action.payload
+      });
+      return {
+        ...state,
+        contacts: filteredContacts
+      }
     default:
       return state
   }

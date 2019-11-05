@@ -1,6 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
+import ContactContext from "../../context/contact/contactContext";
 
 const ContactItem = (props) => {
+  const contactContext = useContext(ContactContext);
+
+  const deleteHandler = (id) => {
+    contactContext.deleteContact(id)
+  }
+
   const {id, name, email, phone, type} = props.contact;
 
   return (
@@ -33,7 +40,12 @@ const ContactItem = (props) => {
       </ul>
       <p>
         <button className="btn btn-dark btn-sm">Edit</button>
-        <button className="btn btn-danger btn-sm">Delete</button>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => deleteHandler(id)}
+        >
+          Delete
+        </button>
       </p>
     </div>
   );
