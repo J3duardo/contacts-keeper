@@ -5,7 +5,12 @@ const ContactItem = (props) => {
   const contactContext = useContext(ContactContext);
 
   const deleteHandler = (id) => {
-    contactContext.deleteContact(id)
+    contactContext.deleteContact(id);
+    contactContext.clearCurrentContact()
+  }
+
+  const setCurrentHandler = () => {
+    contactContext.setCurrentContact(props.contact)
   }
 
   const {id, name, email, phone, type} = props.contact;
@@ -39,7 +44,12 @@ const ContactItem = (props) => {
         )}
       </ul>
       <p>
-        <button className="btn btn-dark btn-sm">Edit</button>
+        <button
+          onClick={setCurrentHandler}
+          className="btn btn-dark btn-sm"
+        >
+          Edit
+        </button>
         <button
           className="btn btn-danger btn-sm"
           onClick={() => deleteHandler(id)}
