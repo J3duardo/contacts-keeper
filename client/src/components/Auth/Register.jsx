@@ -7,7 +7,12 @@ const Register = (props) => {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    if(authContext.isAuthenticated) {
+    if(authContext.isAuthenticated && authContext.user) {
+      setUser({
+        email: "",
+        password: ""
+      });
+      alertContext.setAlert("Successfully registered", "success");
       props.history.push("/");
     }
 
