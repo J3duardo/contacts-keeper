@@ -2,6 +2,7 @@ import React, {useReducer} from "react";
 import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import axios from "axios";
+import setAuthToken from "../../utils/setAuthToken";
 import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS} from "../types";
 
 const AuthState = (props) => {
@@ -16,6 +17,24 @@ const AuthState = (props) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   //Cargar usuario actual
+  const loadCurrentUser = async () => {
+    //Asignar el token a los headers de los requests de axios
+    if(localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+
+    try {
+      const res = await axios.get("/api/auth");
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data.user
+      })
+    } catch (error) {
+      dispatch({
+        type: AUTH_ERROR
+      })
+    }
+  }
 
   //Registrar usuario
   const userRegister = async (userData) => {
@@ -37,7 +56,9 @@ const AuthState = (props) => {
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data
-      })
+      });
+
+      loadCurrentUser();
       
     } catch (error) {
       dispatch({
@@ -67,6 +88,7 @@ const AuthState = (props) => {
         isAuthenticated: state.isAuthenticated,
         loading: state.loading,
         error: state.error,
+        loadCurrentUser: loadCurrentUser,
         userRegister: userRegister,
         clearErrors: clearErrors
       }}
