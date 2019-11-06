@@ -9,8 +9,14 @@ import AlertState from "./context/alert/AlertState";
 import Register from "./components/Auth/Register";
 import Login from "./components/Auth/Login";
 import Alerts from "./components/Layout/Alerts";
+import setAuthToken from "./utils/setAuthToken";
 
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+
+//Asignar el token a los headers de los requests de axios
+if (localStorage.token) {
+  setAuthToken(localStorage.token)
+}
 
 function App() {
   return (

@@ -22,6 +22,7 @@ const ContactForm = () => {
         type: "personal"
       })
     }
+    // eslint-disable-next-line
   }, [contactContext.current]);
 
   const onChangeHandler = (e) => {
