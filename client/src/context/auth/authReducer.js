@@ -10,6 +10,7 @@ export default (state, action) => {
         user: action.payload
       }
     case REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
       //Guardar el token en el localStorage
       localStorage.setItem("token", action.payload.token);
 
@@ -19,6 +20,7 @@ export default (state, action) => {
         isAuthenticated: true,
         loading: false
       }
+    case LOGIN_FAIL:
     case REGISTER_FAIL:
     case AUTH_ERROR:
       //Remover el token del localStorage

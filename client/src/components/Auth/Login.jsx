@@ -1,10 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
+import AuthContext from "../../context/auth/authContext";
+import AlertContext from "../../context/alert/alertContext";
 
-const Login = () => {
+const Login = (props) => {
+  const authContext = useContext(AuthContext);
+  const alertContext = useContext(AlertContext);
+
   const [user, setUser] = useState({
     email: "",
     password: ""
   });
+
+  useEffect(() => {
+    if(authContext.isAuthenticated && authContext.user) {
+      setUser({
+        email: "",
+        password: ""
+      });
+      alertContext.setAlert("Successfully logged in", "success");
+      props.history.push("/");
+    }
+
+    if(authContext.error) {
+      alertContext.setAlert(authContext.error, "danger");
+      authContext.clearErrors();
+    }
+    // eslint-disable-next-line
+  }, [authContext.error, authContext.isAuthenticated])
 
   const onChangeHandler = (e) => {
     setUser({
@@ -15,7 +37,7 @@ const Login = () => {
 
   const onSubmithandler = (e) => {
     e.preventDefault();
-    console.log(user)
+    authContext.userLogin(user);
   }
 
   return (

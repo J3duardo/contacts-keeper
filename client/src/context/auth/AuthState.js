@@ -69,6 +69,34 @@ const AuthState = (props) => {
   }
 
   //Loguear usuario
+  const userLogin = async (loginData) => {
+    try {
+      const res = await axios({
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        url: "/api/auth",
+        data: {
+          email: loginData.email,
+          password: loginData.password
+        }
+      })
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data
+      });
+
+      loadCurrentUser();
+      
+    } catch (error) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: error.response.data.msg
+      })
+    }
+  }
 
   //Cerrar sesión
 
@@ -90,6 +118,7 @@ const AuthState = (props) => {
         error: state.error,
         loadCurrentUser: loadCurrentUser,
         userRegister: userRegister,
+        userLogin: userLogin,
         clearErrors: clearErrors
       }}
     >
