@@ -6,12 +6,15 @@ const Register = (props) => {
   const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
 
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: ""
+  });
+
   useEffect(() => {
-    if(authContext.isAuthenticated && authContext.user) {
-      setUser({
-        email: "",
-        password: ""
-      });
+    if(authContext.isAuthenticated) {
       alertContext.setAlert("Successfully registered", "success");
       props.history.push("/");
     }
@@ -21,14 +24,7 @@ const Register = (props) => {
       authContext.clearErrors();
     }
     // eslint-disable-next-line
-  }, [authContext.error, authContext.isAuthenticated])
-
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-    passwordConfirm: ""
-  });
+  }, [authContext.error, authContext.isAuthenticated, authContext.user]);
 
   const onChangeHandler = (e) => {
     setUser({
@@ -45,12 +41,6 @@ const Register = (props) => {
       alertContext.setAlert("Passwords don't match", "danger")
     } else {
       authContext.userRegister(user);
-      setUser({
-        name: "",
-        email: "",
-        password: "",
-        passwordConfirm: ""
-      })
     }
   }
 

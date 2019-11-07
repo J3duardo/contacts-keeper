@@ -12,11 +12,7 @@ const Login = (props) => {
   });
 
   useEffect(() => {
-    if(authContext.isAuthenticated && authContext.user) {
-      setUser({
-        email: "",
-        password: ""
-      });
+    if(authContext.isAuthenticated) {
       alertContext.setAlert("Successfully logged in", "success");
       props.history.push("/");
     }
