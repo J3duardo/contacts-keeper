@@ -1,20 +1,31 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import ContactItem from "./ContactItem";
 import ContactContext from "../../context/contact/contactContext";
+import AlertContext from "../../context/alert/alertContext";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 
 const Contacts = () => {
+  const alertContext = useContext(AlertContext);
   const contactContext = useContext(ContactContext);
 
-  const {contacts, filteredContacts, filter} = contactContext;
+  const {contacts, filteredContacts, filter, contactError, clearErrors} = contactContext;
 
-  const renderContacts = () => {
+  useEffect(() => {
+    contactContext.getUserContacts();
+    
+    if(contactError) {
+      alertContext.setAlert(contactError, "danger");
+    }
+    clearErrors();
+  }, [contactError])
+
+  const renderFilteredContacts = () => {
     if(filteredContacts.length === 0 && !filter) {
       return (
         <TransitionGroup>
           {contacts.map(contact => {
             return (
-              <CSSTransition key={contact.id} timeout={500} classNames="item">
+              <CSSTransition key={contact._id} timeout={500} classNames="item">
                 <ContactItem contact={contact} />
               </CSSTransition>
             )
@@ -28,8 +39,8 @@ const Contacts = () => {
         <TransitionGroup>
           {filteredContacts.map(contact => {
             return (
-              <CSSTransition key={contact.id} timeout={500} classNames="item">
-                <ContactItem key={contact.id} contact={contact} />
+              <CSSTransition key={contact._id} timeout={500} classNames="item">
+                <ContactItem contact={contact} />
               </CSSTransition>
             )
           })}
@@ -40,7 +51,7 @@ const Contacts = () => {
 
   return (
     <React.Fragment>
-      {renderContacts()}
+      {renderFilteredContacts()}
     </React.Fragment>
   );
 }

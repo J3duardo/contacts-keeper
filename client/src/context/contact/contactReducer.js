@@ -1,11 +1,22 @@
-import {ADD_CONTACT, DELETE_CONTACT, SET_CURRENT, CLEAR_CURRENT, UPDATE_CONTACT, FILTER_CONTACTS, CLEAR_FILTER} from "../types";
+import {GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT, SET_CURRENT, CLEAR_CURRENT, UPDATE_CONTACT, FILTER_CONTACTS, CLEAR_CONTACTS, CLEAR_FILTER, CONTACT_ERROR, CLEAR_ERRORS} from "../types";
 
 export default (state, action) => {
   switch(action.type) {
+    case GET_CONTACTS:
+      return {
+        ...state,
+        contacts: action.payload,
+        loading: false
+      }
     case ADD_CONTACT:
       return {
         ...state,
         contacts: [...state.contacts, action.payload]
+      }
+    case CONTACT_ERROR:
+      return {
+        ...state,
+        contactError: action.payload
       }
     case DELETE_CONTACT:
       const nonDeletedContacts = state.contacts.filter(contact => {
@@ -47,6 +58,16 @@ export default (state, action) => {
       return {
         ...state,
         current: null
+      }
+    case CLEAR_CONTACTS:
+      return {
+        ...state,
+        contacts: []
+      }
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        contactError: null
       }
     default:
       return state

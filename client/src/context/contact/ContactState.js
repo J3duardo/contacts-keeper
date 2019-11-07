@@ -1,48 +1,72 @@
 import React, {useReducer} from "react";
-import uuid from "uuid";
 import ContactContext from "./contactContext";
 import contactReducer from "./contactReducer";
-import {ADD_CONTACT, DELETE_CONTACT, SET_CURRENT, CLEAR_CURRENT, UPDATE_CONTACT, FILTER_CONTACTS, CLEAR_FILTER} from "../types";
+import axios from "axios";
+import {GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT, SET_CURRENT, CLEAR_CURRENT, UPDATE_CONTACT, FILTER_CONTACTS, CLEAR_CONTACTS, CLEAR_FILTER, CONTACT_ERROR, CLEAR_ERRORS} from "../types";
 
 const ContactState = (props) => {
   const initialState = {
-    contacts: [
-      {
-        id: 1,
-        name: "Persona 1",
-        email: "persona1@mail.com",
-        phone: "111-111-1111",
-        type: "professional"
-      },
-      {
-        id: 2,
-        name: "Persona 2",
-        email: "persona2@mail.com",
-        phone: "222-222-2222",
-        type: "personal"
-      },
-      {
-        id: 3,
-        name: "Persona 3",
-        email: "persona3@mail.com",
-        phone: "333-333-3333",
-        type: "personal"
-      }
-    ],
+    contacts: [],
     current: null,
     filter: null,
-    filteredContacts: []
+    filteredContacts: [],
+    contactError: null
   }
 
   const [state, dispatch] = useReducer(contactReducer, initialState);
 
+  //Cargar los contactos del usuario
+  const getUserContacts = async () => {
+    try {
+      const contacts = await axios.get("/api/contacts");
+
+      dispatch({
+        type: GET_CONTACTS,
+        payload: contacts.data.contacts
+      })
+    } catch (error) {
+      dispatch({
+        type: CONTACT_ERROR,
+        payload: error.response.data.msg
+      })
+    }
+  }
+
   //Agregar contacto
-  const addContact = (contactData) => {
-    contactData.id = uuid.v4();
-    dispatch({
-      type: ADD_CONTACT,
-      payload: contactData
-    })
+  const addContact = async (contactData) => {
+    try {
+      const res = await axios({
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        url: "/api/contacts",
+        data: {
+          name: contactData.name,
+          email: contactData.email,
+          phone: contactData.phone,
+          type: contactData.type
+        }
+      })
+      dispatch({
+        type: ADD_CONTACT,
+        payload: res.data.contact
+      })
+
+    } catch (error) {
+      if(error.response.data.errors) {
+        return error.response.data.errors.forEach(error => {
+          dispatch({
+            type: CONTACT_ERROR,
+            payload: error.msg
+          })
+        })
+      }
+      dispatch({
+        type: CONTACT_ERROR,
+        payload: error.response.data.msg
+      })
+    }
   }
 
   //Borrar contacto
@@ -91,6 +115,20 @@ const ContactState = (props) => {
     })
   }
 
+  //Limpiar errores
+  const clearErrors = () => {
+    dispatch({
+      type: CLEAR_ERRORS
+    })
+  }
+
+  //Lipiar contactos
+  const clearContacts = () => {
+    dispatch({
+      type: CLEAR_CONTACTS
+    })
+  }
+
 
   return (
     <ContactContext.Provider
@@ -99,13 +137,17 @@ const ContactState = (props) => {
         current: state.current,
         filter: state.filter,
         filteredContacts: state.filteredContacts,
+        contactError: state.contactError,
+        getUserContacts:getUserContacts,
         addContact: addContact,
         deleteContact: deleteContact,
         setCurrentContact: setCurrentContact,
         clearCurrentContact: clearCurrentContact,
         updateContact: updateContact,
         filterContacts: filterContacts,
-        clearFilter:clearFilter
+        clearFilter:clearFilter,
+        clearErrors: clearErrors,
+        clearContacts: clearContacts
       }}
     >
       {props.children}
