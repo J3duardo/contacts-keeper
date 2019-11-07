@@ -14,7 +14,7 @@ router.get("/", auth, async (req, res) => {
   }
   catch (error) {
     console.log(error.message)
-    res.status(500).json({msg: "Error interno del servidor"})
+    res.status(500).json({msg: "Internal server error"})
   }
 });
 
@@ -61,7 +61,7 @@ router.post("/", [
   }
   catch (error) {
     console.log(error.message);
-    res.status(500).send("Error interno del servidor")
+    res.status(500).send("Internal server error")
   }
 
 });

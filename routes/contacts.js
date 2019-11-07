@@ -12,7 +12,7 @@ router.get("/", auth, async (req, res) => {
     res.json({contacts})
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({msg: "Error interno del servidor"})
+    res.status(500).json({msg: "Internal server error"})
   }
 });
 
@@ -43,18 +43,18 @@ router.post("/", [auth, [
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({msg: "Error interno del servidor"})
+    res.status(500).json({msg: "Internal server error"})
   }
 });
 
 //Editar un contacto
 router.put("/:contactId", (req, res) => {
-  res.send("Editar contacto")
+  res.send("Update contact")
 });
 
 //Borrar un contacto
 router.delete("/:contactId", (req, res) => {
-  res.send("Borrar un contacto")
+  res.send("Delete contact")
 });
 
 module.exports = router;

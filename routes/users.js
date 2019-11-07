@@ -26,7 +26,7 @@ router.post("/", [
     //Chequear si el usuario ya existe
     if(user) {
       return res.status(400).json({
-        msg: "Ya existe un usuario asociado al email ingresado"
+        msg: "User already exists"
       })
     }
 
@@ -60,7 +60,7 @@ router.post("/", [
 
   } catch (error) {
     console.log(error.message);
-    res.status(500).send("Error interno del servidor")
+    res.status(500).send("Internal server error")
   }
 });
 
