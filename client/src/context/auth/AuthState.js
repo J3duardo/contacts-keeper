@@ -61,6 +61,14 @@ const AuthState = (props) => {
       loadCurrentUser();
       
     } catch (error) {
+      if(error.response.data.errors) {
+        error.response.data.errors.forEach(error => {
+          dispatch({
+            type: REGISTER_FAIL,
+            payload: error.msg
+          })
+        })
+      }
       dispatch({
         type: REGISTER_FAIL,
         payload: error.response.data.msg
@@ -91,6 +99,14 @@ const AuthState = (props) => {
       loadCurrentUser();
       
     } catch (error) {
+      if(error.response.data.errors) {
+        error.response.data.errors.forEach(error => {
+          dispatch({
+            type: LOGIN_FAIL,
+            payload: error.msg
+          })
+        })
+      }
       dispatch({
         type: LOGIN_FAIL,
         payload: error.response.data.msg
