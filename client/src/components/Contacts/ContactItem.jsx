@@ -13,7 +13,7 @@ const ContactItem = (props) => {
     contactContext.setCurrentContact(props.contact)
   }
 
-  const {id, name, email, phone, type} = props.contact;
+  const {_id, name, email, phone, type} = props.contact;
 
   return (
     <div className="card bg-light">
@@ -52,7 +52,7 @@ const ContactItem = (props) => {
         </button>
         <button
           className="btn btn-danger btn-sm"
-          onClick={() => deleteHandler(id)}
+          onClick={() => deleteHandler(_id)}
         >
           Delete
         </button>

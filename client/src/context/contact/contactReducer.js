@@ -20,7 +20,7 @@ export default (state, action) => {
       }
     case DELETE_CONTACT:
       const nonDeletedContacts = state.contacts.filter(contact => {
-        return contact.id !== action.payload
+        return contact._id !== action.payload
       });
       return {
         ...state,
