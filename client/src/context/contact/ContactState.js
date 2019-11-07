@@ -103,11 +103,36 @@ const ContactState = (props) => {
   }
 
   //Actualizar contacto
-  const updateContact = (contactData) => {
-    dispatch({
-      type: UPDATE_CONTACT,
-      payload: contactData
-    })
+  const updateContact = async (contactData) => {
+    try {
+      const updatedUser = await axios({
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "PUT",
+        url: `/api/contacts/${state.current._id}`,
+        data: {...contactData}
+      });
+
+      dispatch({
+        type: UPDATE_CONTACT,
+        payload: updatedUser.data.contact
+      })
+
+    } catch (error) {
+      if(error.response.data.errors) {
+        return error.response.data.errors.forEach(error => {
+          dispatch({
+            type: CONTACT_ERROR,
+            payload: error.msg
+          })
+        })
+      }
+      dispatch({
+        type: CONTACT_ERROR,
+        payload: error.response.data.msg
+      })
+    }
   }
 
   //Filtrar contactos

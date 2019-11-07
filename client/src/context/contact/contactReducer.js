@@ -27,7 +27,7 @@ export default (state, action) => {
         contacts: nonDeletedContacts
       }
     case UPDATE_CONTACT:
-      const contactIndex = state.contacts.findIndex(contact => contact.id === action.payload.id);
+      const contactIndex = state.contacts.findIndex(contact => contact._id === action.payload._id);
       const updatedContacts = [...state.contacts];
       updatedContacts.splice(contactIndex, 1, action.payload);
       return {
