@@ -115,6 +115,11 @@ const AuthState = (props) => {
   }
 
   //Cerrar sesión
+  const logout = () => {
+    dispatch({
+      type: LOGOUT
+    })
+  }
 
   //Limpiar errores
   const clearErrors = () => {
@@ -135,6 +140,7 @@ const AuthState = (props) => {
         loadCurrentUser: loadCurrentUser,
         userRegister: userRegister,
         userLogin: userLogin,
+        logout: logout,
         clearErrors: clearErrors
       }}
     >
