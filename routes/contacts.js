@@ -53,8 +53,26 @@ router.put("/:contactId", (req, res) => {
 });
 
 //Borrar un contacto
-router.delete("/:contactId", (req, res) => {
-  res.send("Delete contact")
+router.delete("/:contactId", auth, async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.contactId);
+
+    if(!contact) {
+      return res.status(404).json({
+        msg: "Contact not found"
+      })
+    }
+
+    await Contact.findByIdAndDelete(req.params.contactId);
+
+    res.json({
+      msg: `Contact ${contact.name} deleted successfully`
+    })
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).status({msg: "Internal server error"})
+  }
 });
 
 module.exports = router;
