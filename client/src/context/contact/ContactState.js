@@ -2,7 +2,7 @@ import React, {useReducer} from "react";
 import ContactContext from "./contactContext";
 import contactReducer from "./contactReducer";
 import axios from "axios";
-import {GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT, SET_CURRENT, CLEAR_CURRENT, UPDATE_CONTACT, FILTER_CONTACTS, CLEAR_CONTACTS, CLEAR_FILTER, CONTACT_ERROR, CLEAR_ERRORS} from "../types";
+import {GET_CONTACTS, ADD_CONTACT, DELETE_CONTACT, SET_CURRENT, CLEAR_CURRENT, UPDATE_CONTACT, FILTER_CONTACTS, CLEAR_CONTACTS, CLEAR_FILTER, CONTACT_ERROR, CLEAR_ERRORS, SET_LOADER} from "../types";
 
 const ContactState = (props) => {
   const initialState = {
@@ -10,13 +10,18 @@ const ContactState = (props) => {
     current: null,
     filter: null,
     filteredContacts: [],
-    contactError: null
+    contactError: null,
+    loading: false
   }
 
   const [state, dispatch] = useReducer(contactReducer, initialState);
 
   //Cargar los contactos del usuario
   const getUserContacts = async () => {
+    dispatch({
+      type: SET_LOADER
+    });
+
     try {
       const contacts = await axios.get("/api/contacts");
 
@@ -34,6 +39,9 @@ const ContactState = (props) => {
 
   //Agregar contacto
   const addContact = async (contactData) => {
+    dispatch({
+      type: SET_LOADER
+    });
     try {
       const res = await axios({
         headers: {
@@ -71,6 +79,10 @@ const ContactState = (props) => {
 
   //Borrar contacto
   const deleteContact = async (id) => {
+    dispatch({
+      type: SET_LOADER
+    });
+
     try {
       await axios.delete(`/api/contacts/${id}`);
 
@@ -104,6 +116,10 @@ const ContactState = (props) => {
 
   //Actualizar contacto
   const updateContact = async (contactData) => {
+    dispatch({
+      type: SET_LOADER
+    });
+
     try {
       const updatedUser = await axios({
         headers: {
@@ -173,6 +189,7 @@ const ContactState = (props) => {
         filter: state.filter,
         filteredContacts: state.filteredContacts,
         contactError: state.contactError,
+        loading: state.loading,
         getUserContacts:getUserContacts,
         addContact: addContact,
         deleteContact: deleteContact,

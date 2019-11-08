@@ -3,12 +3,13 @@ import ContactItem from "./ContactItem";
 import ContactContext from "../../context/contact/contactContext";
 import AlertContext from "../../context/alert/alertContext";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
+import Loader from "../Loader/Loader";
 
 const Contacts = () => {
   const alertContext = useContext(AlertContext);
   const contactContext = useContext(ContactContext);
 
-  const {contacts, filteredContacts, filter, contactError, clearErrors} = contactContext;
+  const {contacts, filteredContacts, filter, contactError, clearErrors, loading} = contactContext;
 
   useEffect(() => {
     contactContext.getUserContacts();
@@ -21,6 +22,14 @@ const Contacts = () => {
 
   const renderFilteredContacts = () => {
     if(filteredContacts.length === 0 && !filter) {
+      if(contacts.length === 0 && loading) {
+        return <Loader />
+      }
+
+      if(contacts.length === 0 && !loading) {
+        return <h2>Contact list is empty</h2>
+      }
+
       return (
         <TransitionGroup>
           {contacts.map(contact => {
