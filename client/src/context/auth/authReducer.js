@@ -1,7 +1,12 @@
-import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS} from "../types";
+import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS, SET_LOADER} from "../types";
 
 export default (state, action) => {
   switch(action.type) {
+    case SET_LOADER:
+      return {
+        ...state,
+        loading: true
+      }
     case USER_LOADED:
       return {
         ...state,

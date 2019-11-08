@@ -1,6 +1,8 @@
 import React, {useState, useContext, useEffect} from 'react';
 import AuthContext from "../../context/auth/authContext";
 import AlertContext from "../../context/alert/alertContext";
+import Loader from '../Loader/Loader';
+import "./loaderContainer.css";
 
 const Login = (props) => {
   const authContext = useContext(AuthContext);
@@ -37,6 +39,11 @@ const Login = (props) => {
 
   return (
     <div className="form-container">
+      {authContext.loading &&
+        <div className="loader-container">
+          <Loader />
+        </div>      
+      }
       <h1>Account <span className="text-primary">Login</span></h1>
       <form onSubmit={onSubmithandler}>
         <div className="form-group">

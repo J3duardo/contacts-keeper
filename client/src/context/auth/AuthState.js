@@ -3,14 +3,14 @@ import AuthContext from "./authContext";
 import authReducer from "./authReducer";
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
-import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS} from "../types";
+import {REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_ERRORS, SET_LOADER} from "../types";
 
 const AuthState = (props) => {
   const initialState = {
     token: localStorage.getItem("token"),
     user: null,
     isAuthenticated: false,
-    loading: true,
+    loading: false,
     error: null
   }
 
@@ -18,6 +18,10 @@ const AuthState = (props) => {
 
   //Cargar usuario actual
   const loadCurrentUser = async () => {
+    dispatch({
+      type: SET_LOADER
+    });
+    
     //Asignar el token a los headers de los requests de axios
     if(localStorage.token) {
       setAuthToken(localStorage.token);
@@ -38,6 +42,10 @@ const AuthState = (props) => {
 
   //Registrar usuario
   const userRegister = async (userData) => {
+    dispatch({
+      type: SET_LOADER
+    });
+
     try {
       const res = await axios({
         headers: {
@@ -78,6 +86,10 @@ const AuthState = (props) => {
 
   //Loguear usuario
   const userLogin = async (loginData) => {
+    dispatch({
+      type: SET_LOADER
+    });
+    
     try {
       const res = await axios({
         headers: {

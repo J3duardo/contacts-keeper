@@ -1,6 +1,8 @@
 import React, {useState, useContext, useEffect} from 'react';
 import AlertContext from "../../context/alert/alertContext";
 import AuthContext from "../../context/auth/authContext";
+import Loader from '../Loader/Loader';
+import "./loaderContainer.css";
 
 const Register = (props) => {
   const alertContext = useContext(AlertContext);
@@ -46,6 +48,11 @@ const Register = (props) => {
 
   return (
     <div className="form-container">
+      {authContext.loading &&
+        <div className="loader-container">
+          <Loader />
+        </div>      
+      }
       <h1>Account <span className="text-primary">Register</span></h1>
       <form onSubmit={onSubmithandler}>
         <div className="form-group">
