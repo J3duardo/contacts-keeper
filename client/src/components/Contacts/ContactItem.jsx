@@ -1,13 +1,10 @@
 import React, {useContext} from "react";
 import ContactContext from "../../context/contact/contactContext";
+import ModalContext from "../../context/modal/modalContext";
 
 const ContactItem = (props) => {
   const contactContext = useContext(ContactContext);
-
-  const deleteHandler = (id) => {
-    contactContext.deleteContact(id);
-    contactContext.clearCurrentContact()
-  }
+  const modalContext = useContext(ModalContext);
 
   const setCurrentHandler = () => {
     contactContext.setCurrentContact(props.contact)
@@ -52,7 +49,7 @@ const ContactItem = (props) => {
         </button>
         <button
           className="btn btn-danger btn-sm"
-          onClick={() => deleteHandler(_id)}
+          onClick={() => modalContext.openModal(_id)}
         >
           Delete
         </button>
