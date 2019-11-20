@@ -6,6 +6,7 @@ import About from "./components/Pages/About";
 import ContactState from "./context/contact/ContactState";
 import AuthState from "./context/auth/AuthState";
 import AlertState from "./context/alert/AlertState";
+import ModalState from "./context/modal/ModalState";
 import Register from "./components/Auth/Register";
 import Login from "./components/Auth/Login";
 import Alerts from "./components/Layout/Alerts";
@@ -21,26 +22,28 @@ if (localStorage.token) {
 
 function App() {
   return (
-    <AlertState>
-      <AuthState>
-        <ContactState>
-          <BrowserRouter>
-            <React.Fragment>
-              <Navbar />
-              <div className="container">
-                <Alerts />
-                <Switch>
-                  <PrivateRoute exact path="/" component={Home} />
-                  <Route exact path="/register" component={Register} />
-                  <Route exact path="/login" component={Login} />
-                  <Route exact path="/about" component={About} />
-                </Switch>
-              </div>
-            </React.Fragment>
-          </BrowserRouter>
-        </ContactState>
-      </AuthState>
-    </AlertState>
+    <ModalState>
+      <AlertState>
+        <AuthState>
+          <ContactState>
+            <BrowserRouter>
+              <React.Fragment>
+                <Navbar />
+                <div className="container">
+                  <Alerts />
+                  <Switch>
+                    <PrivateRoute exact path="/" component={Home} />
+                    <Route exact path="/register" component={Register} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/about" component={About} />
+                  </Switch>
+                </div>
+              </React.Fragment>
+            </BrowserRouter>
+          </ContactState>
+        </AuthState>
+      </AlertState>
+    </ModalState>
   );
 }
 
