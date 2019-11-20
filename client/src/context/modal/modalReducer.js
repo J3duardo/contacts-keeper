@@ -5,13 +5,13 @@ export default (state, action) => {
     case OPEN_MODAL:
       return {
         ...state,
-        openModal: true,
+        isOpen: true,
         itemId: action.payload
       }
     case CLOSE_MODAL:
       return {
         ...state,
-        openModal: false,
+        isOpen: false,
         itemId: null
       }
     default:

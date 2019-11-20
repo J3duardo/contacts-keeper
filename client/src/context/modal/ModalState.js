@@ -27,7 +27,7 @@ const ModalState = (props) => {
   return (
     <ModalContext.Provider
       value={{
-        isOpen: state.openModal,
+        isOpen: state.isOpen,
         itemId: state.itemId,
         openModal,
         closeModal
